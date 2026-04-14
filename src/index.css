@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   VARIABLES & BASE
+   ============================================ */
+:root {
+  --color-base:    #0D0D0F;
+  --color-surface: #141417;
+  --color-card:    #1C1C21;
+  --color-border:  #2A2A32;
+  --color-accent:  #6366F1;
+  --color-accent-dim: #312E81;
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body:    'Barlow', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+}
+
+/* Reset de base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-base);
+}
+
+body {
+  font-family: var(--font-body);
+  color: #E5E7EB;
+  overscroll-behavior: none;
+}
+
+/* Désactiver la sélection de texte sur les boutons */
+button {
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+
+/* Scrollbar fine et sombre */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+
+/* Inputs : pas de spinner sur les champs number */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type=number] { -moz-appearance: textfield; }
+
+/* ============================================
+   CLASSES UTILITAIRES CUSTOM
+   ============================================ */
+
+/* Police display */
+.font-display { font-family: var(--font-display); }
+/* Police mono */
+.font-mono-num { font-family: var(--font-mono); }
+
+/* Carte de base */
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+}
+
+/* Bouton principal */
+.btn-primary {
+  background: var(--color-accent);
+  color: white;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+  border-radius: 14px;
+  padding: 14px 20px;
+  transition: transform 0.1s ease, opacity 0.1s ease;
+  border: none;
+  width: 100%;
+}
+.btn-primary:active { transform: scale(0.96); opacity: 0.9; }
+
+/* Bouton secondaire */
+.btn-secondary {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  color: #9CA3AF;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  border-radius: 14px;
+  padding: 12px 16px;
+  transition: transform 0.1s ease, border-color 0.15s ease;
+}
+.btn-secondary:active { transform: scale(0.96); }
+.btn-secondary:hover  { border-color: var(--color-accent); color: white; }
+
+/* Input de base */
+.input-base {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  color: white;
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+.input-base:focus { border-color: var(--color-accent); }
+.input-base::placeholder { color: #4B5563; }
+
+/* Input numérique (reps / poids) */
+.input-num {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  color: white;
+  padding: 10px 6px;
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.input-num:focus { border-color: var(--color-accent); background: #1a1a22; }
+.input-num::placeholder { color: #374151; }
+
+/* Glow effect sur l'accent */
+.accent-glow {
+  box-shadow: 0 0 18px rgba(99,102,241,0.3);
+}
+
+/* Animation de pulsation pour le timer actif */
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); }
+  70%  { box-shadow: 0 0 0 8px rgba(99,102,241,0); }
+  100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+}
+.timer-pulse { animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+
+/* Fade-in d'entrée pour les blocs */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-in { animation: fadeSlideIn 0.2s ease forwards; }
+
+/* Ligne de série : highlight sur focus */
+.set-row:focus-within {
+  background: rgba(99,102,241,0.04);
+  border-radius: 10px;
+}
