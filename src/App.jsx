@@ -9,6 +9,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, ReferenceLine,
 } from 'recharts'
+import { getUserId } from './supabase.js'
 
 // ============================================================
 //  CONSTANTES : Exercices prédéfinis par catégorie
@@ -1133,6 +1134,16 @@ const ProgressView = ({ data }) => {
 // ============================================================
 const SettingsView = ({ data, setData, timer }) => {
 
+  // --- Logique de l'ID utilisateur ---
+  const userId = getUserId()
+  const [copied, setCopied] = useState(false)
+
+  const copyId = () => {
+    navigator.clipboard.writeText(userId)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
   // --- Export JSON ---
   const exportJSON = () => {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
@@ -1189,9 +1200,52 @@ const SettingsView = ({ data, setData, timer }) => {
   const totalVolume = finished.reduce((acc, s) =>
     acc + s.exercises.reduce((a, ex) => a + calcVolume(ex.sets), 0), 0)
 
+
+
   return (
     <div className="flex flex-col h-full overflow-y-auto px-4 py-4 space-y-4">
       <h2 className="font-display font-700 text-white text-xl tracking-widest px-1">RÉGLAGES</h2>
+
+      {/* BLOC 1 : Affichage et copie de l'identifiant */}
+      <div className="card p-4">
+        <p className="font-display font-600 text-[11px] tracking-widest text-gray-500 uppercase mb-3">
+          Identifiant appareil
+        </p>
+        <p className="font-mono text-xs text-gray-400 break-all mb-3 bg-[#141417] p-3 rounded-xl">
+          {userId}
+        </p>
+        <button onClick={copyId} className="btn-secondary w-full py-3 text-sm">
+          {copied ? '✓ Copié !' : 'Copier mon identifiant'}
+        </button>
+        <p className="text-gray-700 text-xs mt-3 text-center">
+          Colle cet identifiant dans les Paramètres de l'autre appareil pour synchroniser.
+        </p>
+      </div>
+
+      {/* BLOC 2 : Formulaire pour rejoindre un autre appareil */}
+      <div className="card p-4">
+        <p className="font-display font-600 text-[11px] tracking-widest text-gray-500 uppercase mb-3">
+          Rejoindre un autre appareil
+        </p>
+        <input
+          type="text"
+          placeholder="Colle ici l'identifiant de ton autre appareil"
+          className="input-base text-xs mb-3"
+          id="pasteId"
+        />
+        <button
+          onClick={() => {
+            const val = document.getElementById('pasteId').value.trim()
+            if (!val) return
+            if (!window.confirm('Remplacer ton identifiant actuel ? Les données locales seront remplacées par celles de l\'autre appareil.')) return
+            localStorage.setItem('wp_user_id', val)
+            window.location.reload()
+          }}
+          className="btn-primary text-sm py-3"
+        >
+          Synchroniser avec cet appareil
+        </button>
+      </div>
 
       {/* Statistiques globales */}
       <div className="card p-4">
