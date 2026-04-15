@@ -9,7 +9,6 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, ReferenceLine,
 } from 'recharts'
-import { getUserId } from './supabase.js'
 
 // ============================================================
 //  CONSTANTES : Exercices prédéfinis par catégorie
