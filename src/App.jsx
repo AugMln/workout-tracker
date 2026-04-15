@@ -77,11 +77,9 @@ const CATEGORY_COLORS = {
 // ============================================================
 //  PERSISTANCE : localStorage
 // ============================================================
-const STORAGE_KEY = 'workoutpro_v1'
 
 import { supabase, getUserId } from './supabase.js'
 
-// Charge les données depuis Supabase (avec fallback localStorage si hors-ligne)
 const loadFromStorage = async () => {
   try {
     const { data, error } = await supabase
@@ -92,13 +90,11 @@ const loadFromStorage = async () => {
     if (error || !data) throw new Error()
     return data.data
   } catch {
-    // Hors-ligne : on retombe sur le cache local
     const raw = localStorage.getItem('wp_cache')
     return raw ? JSON.parse(raw) : { sessions: [], customExercises: [] }
   }
 }
 
-// Sauvegarde dans Supabase ET dans le cache local (pour le mode hors-ligne)
 const saveToStorage = async (appData) => {
   localStorage.setItem('wp_cache', JSON.stringify(appData))
   try {
@@ -109,7 +105,7 @@ const saveToStorage = async (appData) => {
       updated_at: new Date().toISOString(),
     })
   } catch (e) {
-    console.warn('[WorkoutPro] Sauvegarde cloud échouée, cache local utilisé')
+    console.warn('[WorkoutPro] Sauvegarde cloud echouee, cache local utilise')
   }
 }
 
@@ -1288,7 +1284,6 @@ const SettingsView = ({ data, setData, timer }) => {
 export default function App() {
   // Chargement initial depuis localStorage
   const [data, setData] = useState({ sessions: [], customExercises: [] })
-
   useEffect(() => {
     loadFromStorage().then(d => setData(d))
   }, [])
